@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+
+{% block content %}
+    <div class="container">
+    {% include "messages.html" %}
+    <nav class="navbar navbar-default">
+        <p class="navbar-text navbar-right">   </p>
+        <a href="{% url "reset" %}" onclick="return confirm('{% trans 'Set all reweights to 1.0 and clear GA data' %} ?');" class="btn btn-default navbar-btn navbar-right" >
+                                <i class="icon-trash"></i> {% trans 'Reset all' %} </a>
+
+        <p class="navbar-text navbar-right"> </p>
+        <a href="{% url "pause" %}" class="btn btn-default navbar-btn navbar-right" >{% trans 'Pause' %}</a>
+        <p class="navbar-text navbar-right"> </p>
+        <a href="{% url "start" %}" class="btn btn-default navbar-btn navbar-right" >{% trans 'Start/Resume' %}</a>
+        <p class="navbar-text navbar-right"> </p>
+        <a href="{% url "status" %}" class="btn btn-default navbar-btn navbar-right" >{% trans 'Status' %}</a>
+        <p class="navbar-text navbar-right">  {{ form.filter_choice}} </p>
+        <p class="navbar-text navbar-left"><a href="{% url "osd_stats" %}" class="navbar-link">OSDs</a></p>
+        <p class="navbar-text navbar-left"><a href="{% url "osd_chart" %}" class="navbar-link">OSDs stats</a></p>
+        <p class="navbar-text navbar-left"><a href="{% url "generation_chart" %}" class="navbar-link">{% trans 'GA stats' %}</a></p>
+    </nav>
+
+    
+        <table class="table table-hover">
+        
+        <thead>
+            <tr>
+                <th style="width: 1em;" class="hidden-phone"></th>
+                <th style="width: 2em;" class="hidden-phone" >{% trans 'Name' %}</th>
+                <th style="width: 1em;" class="hidden-phone">{% trans 'Weight' %}</th>
+                <th style="width: 1em;" class="hidden-phone">{% trans 'Reweight' %}</th>
+                <th style="width: 1em;" class="hidden-phone">{% trans 'Placement groups' %}</th>
+                <th style="width: 1em;" class="hidden-phone">{% trans 'Use %' %}</th>
+                <th style="width: 1em;" class="hidden-phone">{% trans 'Size' %}</th>
+                <th style="width: 1em;" class="hidden-phone">{% trans 'Use' %}</th>
+                <th style="width: 1em;" class="hidden-phone">{% trans 'Available' %}</th>
+                <th style="width: 1em;" class="hidden-phone">{% trans 'Var' %}</th>
+                <th style="width: 1em;" class="hidden-phone">{% trans  ' ' %}</th>
+                <th style="width: 1em;">
+
+                <a href="{% url "osd_chart" %}" class="btn btn-mini">
+                    <i class="glyphicon  glyphicon-equalizer"></i> 
+                </a>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for osd in osds %}
+            <tr>
+            <td class="hidden-phone"><i class="glyphicon glyphicon-tasks"></i></td>
+            <td><strong><a href="{% url "osd_stats"  %}" class="block">{{osd.name}}</a></strong></td>
+          <td class="hidden-phone">{{osd.weight}}</td>
+          <td class="hidden-phone">{{osd.reweight}}</td>
+          <td class="hidden-phone">{{osd.pgs}}</td>
+          <td class="hidden-phone">{{osd.pctuse}}</td>
+          <td class="hidden-phone">{{osd.size|filesizeformat}}</td>
+          <td class="hidden-phone">{{osd.use|filesizeformat}}</td>
+          <td class="hidden-phone">{{osd.avail|filesizeformat}}</td>
+          <td class="hidden-phone">{{osd.var}}</td>
+          {% if osd.optim == '1'  %}
+            <td class="hidden-phone"><i class="glyphicon glyphicon-cloud-upload"></i></td>
+          {% elif osd.optim == '2'  %}
+            <td class="hidden-phone"><i class="glyphicon glyphicon-cloud-download"></i></td>
+          {% else %}  
+            <td class="hidden-phone"><i class="glyphicon glyphicon-move"></i></td>
+          {% endif %}
+
+            <td>
+                <div class="dropdown pull-right">
+                    <a class="dropdown-toggle btn btn-mini" data-toggle="dropdown"><i class="glyphicon glyphicon-menu-down icon-white"></i></a>
+                    <ul class="dropdown-menu">
+ 
+                        <li>
+                            <a href="{% url "reweight_osd" osd_id=osd.id weight=osd.reweight %}" >
+                                <span class="glyphicon glyphicon-sort">{% trans ' Reweight osd' %}</span>
+                            </a>
+                            {% if setminmax %}
+                            <a href="{% url "set_osd_criteria" osd_id=osd.id optim=1 %}" >
+                                <span class="glyphicon  glyphicon-cloud-upload">{% trans ' Optimize :up' %}</span>
+                            </a>
+                            <a href="{% url "set_osd_criteria" osd_id=osd.id optim=2 %}" >
+                                <span class="glyphicon glyphicon-cloud-download">{% trans ' Optimize :down' %}</span>
+                            </a>
+                            <a href="{% url "set_osd_criteria" osd_id=osd.id optim=0 %}" >
+                                <span class="glyphicon glyphicon-move">{% trans ' Optimize :auto' %}</span>
+                            </a>
+                             {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </td>
+
+            </tr> 
+
+        {% empty %}
+ 
+        {% endfor %}
+        </tbody> 
+       
+        <tfoot>
+
+        </tfoot>
+        </table>
+        </div>
+        </div>
+    {% endblock %}

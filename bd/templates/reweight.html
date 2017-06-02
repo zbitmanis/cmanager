@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block cssadd %}
+ <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+ 
+{% block content %}
+  <form method="post" action="{% url "reweight_osd" %}">
+    {% csrf_token %}
+    <div class="modal-header"><h3>Reweight OSD</h3></div>
+    <div class="modal-body">
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.level == 40 %}
+                    <div class="danger">
+                        {{message|safe}}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        <fieldset>
+            <div class="row voffset2">
+              <div class="col-xs-4">
+              <label for "osd_id"><b>{% trans 'OSD' %}</b></label> <br>
+              </div> 
+              <div class="col-xs-8">
+              <!---select id="osd_id" name="osd_id" >
+              </select--> 
+              {{ form.osd_id}}
+              </div> 
+            </div>
+            <div class="row voffset2">
+              <div class="col-xs-4">
+                <label for "new_weight"><b>{% trans 'New weight' %}</b></label>
+              </div>
+              <div class="col-xs-8">
+                {{ form.new_weight}}
+              </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="modal-footer">
+          <div class="control-group">
+          <div class="controls">
+            {% if session.admin %} 
+               <a href="{% url "osd_stats" %}" class="btn btn-primary" >{% trans 'Cancel' %}</a>
+            {% else %}
+               <a href="{% url "osd_stats" %}" class="btn btn-primary" >{% trans 'Cancel' %}</a>
+            {% endif %}
+             <button type="submit" class="btn btn-primary">{% trans 'OK' %} <span class="icon-chevron-right icon-white"></span></button>
+          <div class="controls">
+    </div>
+</form>
+{% endblock %}
