@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load l10n %}
+{% load i18n %}
+
+{% block content %}
+<div class="container">
+{% include "messages.html" %}
+
+        <ul class="breadcrumb">
+            <li><a href="{% url "cview" %}">{% trans 'User' %}</a></li> 
+            <li><span class="divider">/</span>
+                <a class="u" href="{% url "pview" %}">{{project.name}}</a></li>
+       </ul> 
+
+    <fieldset>
+    <legend>{% trans 'User' %}<strong> {{project.name}}</strong> {% trans 'status' %} </legend>
+    <p>
+    <table> 
+      <tr>
+        <td style="width: 10em;" class="hidden-phone"><strong>{% trans 'Last accesed' %}</strong></td> 
+        <td style="width: 15em;" class="hidden-phone"><code>{{project.date|date:'SHORT_DATETIME_FORMAT' }}</code></td>
+      </tr>
+      <tr>
+        <td style="width: 10em;" class="hidden-phone"><strong>{% trans 'Containers' %}</strong></td> 
+        <td style="width: 15em;" class="hidden-phone"><code>{{project.x_account_container_count}}</code></td>
+      </tr>
+      <tr>
+        <td style="width: 10em;" class="hidden-phone"><strong>{% trans 'Objects' %}</strong></td> 
+        <td style="width: 15em;" class="hidden-phone"><code>{{project.x_account_object_count}}</code></td>
+      </tr>
+      <tr>
+        <td style="width: 10em;" class="hidden-phone"><strong>{% trans 'Total size' %}</strong></td> 
+        <td style="width: 15em;" class="hidden-phone"><code>{{project.x_account_bytes_used|filesizeformat}}</code></td>
+      </tr>
+
+     </table>
+     <a href="{% url "pview" %}" class="btn btn-primary" >{% trans 'Back' %}</a>
+  </fieldset>
+</div>
+
+{% endblock %}
+
+
+

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block cssadd %}
+ <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+ 
+{% block content %}
+<form method="post" action="{% url "alogin" %}">
+    {% csrf_token %}
+    <div class="modal-header"><h3> {% trans 'Admin Login' %}</h3></div>
+    <div class="modal-body">
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.level == 40 %}
+                    <div class="danger">
+                        {{message|safe}}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        <fieldset>
+            <div class="row voffset2">
+              <div class="col-xs-4">
+              <label for "username"><b>{% trans 'Username' %}</b></label> <br>
+              </div> 
+              <div class="col-xs-8">
+              <input class="focused input-block-level input-small"  name="username" type="text" placeholder="{% trans 'Username' %}">
+              </div> 
+            </div>
+            <div class="row voffset2">
+              <div class="col-xs-4">
+                <label for "password"><b>{% trans 'Password' %}</b></label> 
+              </div>
+              <div class="col-xs-8">
+                <input class="focused input-block-level" name="password" type="password" placeholder="{% trans 'Password' %}"> 
+              </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">{% trans 'Login' %} <span class="icon-chevron-right icon-white"></span></button>
+    </div>
+</form>
+{% endblock %}
